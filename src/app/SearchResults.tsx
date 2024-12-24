@@ -27,15 +27,19 @@ const SearchResults = () => {
 
   return (
     advocates.map((advocate) => (
-      <tr key={advocate.firstName + advocate.lastName}>
-        <td>{advocate.firstName} {advocate.lastName}</td>
-        <td>{advocate.city}</td>
-        <td>{advocate.degree}</td>
-        <td>{advocate.specialties.map((s) => (
-          <div key={s}>{s}</div>
-        ))}</td>
-        <td>{advocate.yearsOfExperience}</td>
-        <td>{advocate.phoneNumber}</td>
+      <tr key={advocate.firstName + advocate.lastName} className="hover:bg-gray-100 transition-colors">
+        <td className="px-4 py-2 text-sm text-gray-700">{advocate.firstName} {advocate.lastName}</td>
+        <td className="px-4 py-2 text-sm text-gray-700">{advocate.city}</td>
+        <td className="px-4 py-2 text-sm text-gray-700">{advocate.degree}</td>
+        <td className="px-4 py-2 text-sm text-gray-700">
+          {advocate.specialties.map((s) => (
+            <div key={s} className="bg-gray-100 rounded-full px-2 py-1 inline-block text-xs text-gray-600 mr-1">
+              {s}
+            </div>
+          ))}
+        </td>
+        <td className="px-4 py-2 text-sm text-gray-700">{advocate.yearsOfExperience}</td>
+        <td className="px-4 py-2 text-sm text-gray-700">{advocate.phoneNumber}</td>
       </tr>
     ))
   );

@@ -1,10 +1,11 @@
 import SearchTerm from "./SearchTerm";
 import AdvocateTable from "./AdvocateTable";
+import Header from "./Header";
 
 export default function Home() {
   return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
+    <main className="m-6">
+      <Header />
       <SearchTerm />
       <AdvocateTable />
     </main>
