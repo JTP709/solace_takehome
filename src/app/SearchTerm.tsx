@@ -29,7 +29,8 @@ const SearchTerm = () => {
 
   return (
     <div>
-      <input aria-label="search for advocates" onChange={handleInputChange} value={searchValue} />;
+      <h2>Search</h2>
+      <input aria-label="search for advocates" onChange={handleInputChange} value={searchValue} />
       <button onClick={handleReset}>Reset Search</button>
     </div>
   )
