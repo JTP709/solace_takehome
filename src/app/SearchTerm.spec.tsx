@@ -1,28 +1,53 @@
-import { describe, it, vi, expect } from "vitest";
-import userEvent from "@testing-library/user-event";
-import { render, screen } from "@testing-library/react";
-import SearchTerm from "./SearchTerm";
+import { describe, beforeEach, afterEach, it, expect, vi, Mock } from 'vitest';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useRouter, useSearchParams } from 'next/navigation';
+import SearchTerm from './SearchTerm';
 
-const useRouter = {
-  push: vi.fn(),
-  replace: vi.fn(),
-  prefetch: vi.fn(),
-  back: vi.fn(),
-  forward: vi.fn(),
-  refresh: vi.fn(),
-};
-
+// Mock the next/navigation hooks
 vi.mock('next/navigation', () => ({
-  useRouter: () => useRouter,
+  useRouter: vi.fn(),
+  useSearchParams: vi.fn(),
 }));
+const pushMock: ReturnType<typeof vi.fn> = vi.fn();
 
-describe("Search Term", () => {
-  it("search input should change url when user types", async () => {
+describe('SearchTerm Component', () => {
+  beforeEach(() => {
+    (useRouter as Mock).mockReturnValue({
+      push: pushMock,
+    });
+    (useSearchParams as Mock).mockReturnValue(new URLSearchParams('search=initialValue'));
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    cleanup();
+  });
+
+  it('renders input with initial search value', () => {
+    render(<SearchTerm />);
+    const inputValue = screen.getByRole('textbox', { name: /search for advocates/i }).getAttribute('value');
+    expect(inputValue).toBe('initialValue');
+  });
+
+  it('updates the URL when typing in the input', async () => {
     const user = userEvent.setup();
     render(<SearchTerm />);
+    const input = screen.getByRole('textbox', { name: /search for advocates/i });
 
-    await user.type(screen.getByLabelText("search for advocates"), "hello");
+    await user.clear(input);
+    await user.type(input, 'hello');
 
-    expect(useRouter.push).toHaveBeenCalledWith({ query: { search: "hello" } });
+    expect(pushMock).toHaveBeenCalledWith('?search=hello');
+  });
+
+  it('removes the search parameter from the URL when input is cleared', async () => {
+    const user = userEvent.setup();
+    render(<SearchTerm />);
+    const input = screen.getByRole('textbox', { name: /search for advocates/i });
+
+    await user.clear(input);
+
+    expect(pushMock).toHaveBeenCalledWith('?');
   });
 });
