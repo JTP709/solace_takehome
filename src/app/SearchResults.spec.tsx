@@ -10,8 +10,16 @@ vi.mock("next/navigation", async (importOriginal) => {
   };
 });
 
+const renderSearchResults = () => render(
+  <table>
+    <tbody>
+      <SearchResults />
+    </tbody>
+  </table>
+);
+
 describe("SearchResults", () => {
-  it("fetches the search query from the URL and filters the advocates", async () => {
+  it("renders the data from the search query", async () => {
     //@ts-ignore
     fetch.mockResponseOnce(JSON.stringify({ data: [
       {
@@ -28,17 +36,16 @@ describe("SearchResults", () => {
         lastName: "Smith",
         city: "Los Angeles",
         degree: "MD",
-        specialties: ["psychiatrist"],
+        specialties: ["therapist"],
         yearsOfExperience: "5",
         phoneNumber: "123-456-7890",
       }
     ] }));
   
-    render(<SearchResults />);
-
+    renderSearchResults();
     await waitFor(() => {
       expect(screen.getByText("John Doe")).toBeVisible();
-    })
-    expect(screen.queryByText("Jane Smith")).not.toBeInTheDocument();
+    });
+    expect(screen.queryByText("Jane Smith")).toBeInTheDocument();
   });
 });
