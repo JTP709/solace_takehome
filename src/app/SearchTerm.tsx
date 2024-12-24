@@ -8,7 +8,7 @@ const SearchTerm = () => {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState<string>(searchParams.get('search') || '');
 
-  const handleInputChange = useCallback((event: React.FormEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.FormEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     setSearchValue(value);
     const newParams = new URLSearchParams(searchParams?.toString() || "");
@@ -18,9 +18,21 @@ const SearchTerm = () => {
       newParams.delete('search');
     }
     router.push(`?${newParams.toString()}`);
-  }, [searchParams, router]);
+  };
 
-  return <input aria-label="search for advocates" onChange={handleInputChange} value={searchValue} />;
+  const handleReset = () => {
+    setSearchValue('');
+    const newParams = new URLSearchParams(searchParams?.toString() || "");
+    newParams.delete('search');
+    router.push(`?${newParams.toString()}`);
+  };
+
+  return (
+    <div>
+      <input aria-label="search for advocates" onChange={handleInputChange} value={searchValue} />;
+      <button onClick={handleReset}>Reset Search</button>
+    </div>
+  )
 };
 
 export default SearchTerm;

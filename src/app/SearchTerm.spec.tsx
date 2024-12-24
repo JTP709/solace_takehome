@@ -50,4 +50,17 @@ describe('SearchTerm Component', () => {
 
     expect(pushMock).toHaveBeenCalledWith('?');
   });
+  it("clicking the 'Reset Search' button clears the input and the URL", async () => {
+    const user = userEvent.setup();
+    render(<SearchTerm />);
+    const input = screen.getByRole('textbox', { name: /search for advocates/i });
+    const resetButton = screen.getByRole('button', { name: /reset search/i });
+
+    await user.clear(input);
+    await user.type(input, 'hello');
+    await user.click(resetButton);
+
+    expect(pushMock).toHaveBeenCalledWith('?');
+    expect(input.getAttribute("value")).toBe('');
+  });
 });
