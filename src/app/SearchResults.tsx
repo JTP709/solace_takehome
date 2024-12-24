@@ -10,8 +10,8 @@ type AdvocatesData = {
   city: string;
   degree: string;
   specialties: string[];
-  yearsOfExperience: string;
-  phoneNumber: string;
+  yearsOfExperience: number;
+  phoneNumber: number;
 }[];
 
 const SearchResults = () => {
@@ -29,7 +29,8 @@ const SearchResults = () => {
           advocate.city.includes(searchTerm) ||
           advocate.degree.includes(searchTerm) ||
           advocate.specialties.includes(searchTerm) ||
-          advocate.yearsOfExperience.includes(searchTerm)
+          advocate.yearsOfExperience.toString().includes(searchTerm) ||
+          advocate.phoneNumber.toString().includes(searchTerm)
         );
       }))
       .then((data) => setAdvocates(data));
