@@ -20,25 +20,14 @@ const SearchResults = () => {
   const [advocates, setAdvocates] = useState<AdvocatesData>([]);
 
   useEffect(() => {
-    fetch(`/api/advocates`)
+    fetch(`/api/advocates?searchTerm=${searchTerm}`)
       .then((response) => response.json())
-      .then((response) => (response.data as AdvocatesData).filter((advocate) => {
-        return (
-          advocate.firstName.includes(searchTerm) ||
-          advocate.lastName.includes(searchTerm) ||
-          advocate.city.includes(searchTerm) ||
-          advocate.degree.includes(searchTerm) ||
-          advocate.specialties.includes(searchTerm) ||
-          advocate.yearsOfExperience.toString().includes(searchTerm) ||
-          advocate.phoneNumber.toString().includes(searchTerm)
-        );
-      }))
-      .then((data) => setAdvocates(data));
+      .then((data) => setAdvocates(data.data));
   }, [searchTerm]);
 
   return (
     advocates.map((advocate) => (
-      <tr key={advocate.id}>
+      <tr key={advocate.firstName + advocate.lastName}>
         <td>{advocate.firstName} {advocate.lastName}</td>
         <td>{advocate.city}</td>
         <td>{advocate.degree}</td>
